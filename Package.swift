@@ -39,14 +39,5 @@ let package = Package(
 
         // A client of the library, which is able to use the macro in its own code.
         .executableTarget(name: "BlackbirdUUIDIDClient", dependencies: ["BlackbirdUUIDID"]),
-
-        // A test target used to develop the macro implementation.
-        .testTarget(
-            name: "BlackbirdUUIDIDTests",
-            dependencies: [
-                "BlackbirdUUIDIDMacros",
-                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
-            ]
-        ),
     ]
 )

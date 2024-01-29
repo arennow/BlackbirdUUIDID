@@ -3,31 +3,55 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-/// Implementation of the `stringify` macro, which takes an expression
-/// of any type and produces a tuple containing the value of that expression
-/// and the source code that produced the value. For example
-///
-///     #stringify(x + y)
-///
-///  will expand to
-///
-///     (x + y, "x + y")
-public struct StringifyMacro: ExpressionMacro {
-    public static func expansion(
-        of node: some FreestandingMacroExpansionSyntax,
-        in context: some MacroExpansionContext
-    ) -> ExprSyntax {
-        guard let argument = node.argumentList.first?.expression else {
-            fatalError("compiler bug: the macro does not have any arguments")
-        }
+public struct BlackbirdUUIDIDMacro: MemberMacro {
+	public static func expansion(of node: AttributeSyntax, providingMembersOf declaration: some DeclGroupSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+		["""
+		struct ID: Codable, Hashable, BlackbirdColumnWrappable, BlackbirdStorableAsText {
+			private let string: String
 
-        return "(\(argument), \(literal: argument.description))"
-    }
+			static func mock(lowByte: UInt8) -> Self {
+				self.init(rawString: String(format: "0x%0x", lowByte))
+			}
+
+			static func random() -> Self {
+				self.init(rawString: UUID().uuidString)
+			}
+
+			init(rawString: String) {
+				self.string = rawString
+			}
+
+			init(from uuid: UUID) {
+				self.string = uuid.uuidString
+			}
+
+			init(from decoder: Decoder) throws {
+				self.init(rawString: try decoder.decodeSingleValue())
+			}
+
+			func encode(to encoder: Encoder) throws {
+				try encoder.encodeSingleValue(self.string)
+			}
+
+			static func from(unifiedRepresentation: String) -> Self {
+				Self(rawString: unifiedRepresentation)
+			}
+
+			static func fromValue(_ value: Blackbird.Value) -> Self? {
+				value.stringValue.map(Self.init(rawString:))
+			}
+
+			func unifiedRepresentation() -> String {
+				self.string
+			}
+		}
+		"""]
+	}
 }
 
 @main
 struct BlackbirdUUIDIDPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
-        StringifyMacro.self,
+		BlackbirdUUIDIDMacro.self,
     ]
 }
