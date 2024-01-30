@@ -9,6 +9,8 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 		struct ID: Codable, Hashable, BlackbirdColumnWrappable, BlackbirdStorableAsText {
 			private let string: String
 
+			static var temporary: Self { Self.mock(lowByte: 0) }
+
 			static func mock(lowByte: UInt8) -> Self {
 				self.init(rawString: String(format: "0x%0x", lowByte))
 			}
