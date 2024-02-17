@@ -23,6 +23,10 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 				self == Self.temporary
 			}
 
+			var ifNonTemporary: Self? {
+				self.isTemporary ? nil : self
+			}
+
 			init(rawString: String) {
 				self.string = rawString
 			}
