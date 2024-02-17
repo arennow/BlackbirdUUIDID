@@ -19,6 +19,10 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 				self.init(rawString: UUID().uuidString)
 			}
 
+			var isTemporary: Bool {
+				self == Self.temporary
+			}
+
 			init(rawString: String) {
 				self.string = rawString
 			}
