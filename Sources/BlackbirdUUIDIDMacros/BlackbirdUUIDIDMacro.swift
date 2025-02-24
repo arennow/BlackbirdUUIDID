@@ -61,7 +61,7 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 
 @main
 struct BlackbirdUUIDIDPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
+	let providingMacros: [Macro.Type] = [
 		BlackbirdUUIDIDMacro.self,
-    ]
+	]
 }
