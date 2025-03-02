@@ -12,13 +12,15 @@ let package = Package(name: "BlackbirdUUIDID",
 									  targets: ["BlackbirdUUIDIDClient"]),
 					  ],
 					  dependencies: [
-					  	.package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"602.0.0"),
+					  	.package(url: "https://github.com/swiftlang/swift-syntax.git", "509.0.0"..<"602.0.0"),
+					  	.package(url: "https://github.com/stackotter/swift-macro-toolkit.git", .upToNextMinor(from: "0.6.0")),
 					  ],
 					  targets: [
 					  	.macro(name: "BlackbirdUUIDIDMacros",
 								 dependencies: [
 								 	.product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
 								 	.product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+								 	.product(name: "MacroToolkit", package: "swift-macro-toolkit"),
 								 ]),
 					  	.target(name: "BlackbirdUUIDID", dependencies: ["BlackbirdUUIDIDMacros"]),
 					  	.executableTarget(name: "BlackbirdUUIDIDClient", dependencies: ["BlackbirdUUIDID"]),
