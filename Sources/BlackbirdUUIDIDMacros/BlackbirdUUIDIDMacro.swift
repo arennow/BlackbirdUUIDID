@@ -8,7 +8,7 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 	public static func expansion(of node: AttributeSyntax, providingMembersOf declaration: some DeclGroupSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
 		let visibility = declaration.isPublic ? "public" : "internal"
 		return ["""
-		\(raw: visibility) struct ID: Codable, Hashable, BlackbirdColumnWrappable, BlackbirdStorableAsText {
+		\(raw: visibility) struct ID: UUIDID, Codable, Hashable, BlackbirdColumnWrappable, BlackbirdStorableAsText {
 			private let string: String
 
 			\(raw: visibility) static var temporary: Self { Self.mock(lowByte: 0) }
@@ -37,19 +37,19 @@ public struct BlackbirdUUIDIDMacro: MemberMacro {
 				self.string = uuid.uuidString
 			}
 
-			\(raw: visibility)  init(from decoder: Decoder) throws {
+			\(raw: visibility) init(from decoder: Decoder) throws {
 				self.init(rawString: try decoder.decodeSingleValue())
 			}
 
-			\(raw: visibility)  func encode(to encoder: Encoder) throws {
+			\(raw: visibility) func encode(to encoder: Encoder) throws {
 				try encoder.encodeSingleValue(self.string)
 			}
 
-			\(raw: visibility)  static func from(unifiedRepresentation: String) -> Self {
+			\(raw: visibility) static func from(unifiedRepresentation: String) -> Self {
 				Self(rawString: unifiedRepresentation)
 			}
 
-			\(raw: visibility)  static func fromValue(_ value: Blackbird.Value) -> Self? {
+			\(raw: visibility) static func fromValue(_ value: Blackbird.Value) -> Self? {
 				value.stringValue.map(Self.init(rawString:))
 			}
 
