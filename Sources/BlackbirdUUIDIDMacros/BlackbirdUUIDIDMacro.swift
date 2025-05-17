@@ -7,8 +7,19 @@ import SwiftSyntaxMacros
 public struct BlackbirdUUIDIDMacro: MemberMacro {
 	public static func expansion(of node: AttributeSyntax, providingMembersOf declaration: some DeclGroupSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
 		let visibility = declaration.isPublic ? "public" : "internal"
+
+		guard let identifier = declaration.asProtocol(NamedDeclSyntax.self)?.name.text else {
+			let diagnostic = DiagnosticBuilder(for: declaration)
+				.message("Can't generate UUIDID on extensions")
+				.build()
+			context.diagnose(diagnostic)
+			return []
+		}
+
 		return ["""
 		\(raw: visibility) struct ID: UUIDID, Codable, Hashable, BlackbirdColumnWrappable, BlackbirdStorableAsText {
+			\(raw: visibility) typealias OwningType = \(raw: identifier)
+
 			private let string: String
 
 			\(raw: visibility) static var temporary: Self { Self.mock(lowByte: 0) }

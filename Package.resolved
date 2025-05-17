@@ -1,13 +1,13 @@
 {
-  "originHash" : "3ea0ef4feef0dbfa04f01c9f4914b4def5605c3a5f9f2a9d6f4c40616da559b9",
+  "originHash" : "daaec7d601b0605cb82e09834f3595e5b054dc43234745915a024082ee436d7e",
   "pins" : [
     {
       "identity" : "swift-macro-toolkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stackotter/swift-macro-toolkit.git",
       "state" : {
-        "revision" : "e706aa98bc28f82677923f7b8f560bba6f90fac2",
-        "version" : "0.6.0"
+        "revision" : "569627091e1fbb8745d691aeeb008e7247dedb7c",
+        "version" : "0.6.1"
       }
     },
     {
